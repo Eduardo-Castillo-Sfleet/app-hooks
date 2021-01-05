@@ -1,31 +1,63 @@
-import React, { useState, useEffect } from 'react';
-
-function App() {
-   // Declara una nueva variable de estado, que llamaremos "count".
-   const [count, setCount] = useState(0);
-   const [fruit] = useState('manzana');
-   const [libros] = useState([{ titulo: 'La vuelta al mundo en 80 dias'}, {titulo: '100 años de soledad'}])
-   const [titulo, setTitulo] = useState('');
+import React, { useState } from 'react';
+import { Table, Radio, Divider } from 'antd';
 
 
-   //componentDidMount y componentDidUpdate
-   useEffect(() => {
-     document.title = `You clicked ${count} times`;
-   });
+const App = (props) => {
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age',
+    },
+  ];
+  const data = [
+    {
+      key: '1',
+      name: 'John Brown',
+      age: 32,
+    },
+    {
+      key: '2',
+      name: 'Jim Green',
+      age: 42,
+    },
+    {
+      key: '3',
+      name: 'Joe Black',
+      age: 32,
+    },
+    {
+      key: '4',
+      name: 'Disabled User',
+      age: 99,
+    },
+  ]; // rowSelection object indicates the need for row selection
 
-   return (
-     <div>
-       <h2>Hook de estado{titulo}</h2>
-       <p>You clicked {count} times</p>
-       <button onClick={() => setCount(count + 1)}>
-         Click me
-       </button>
-       <p>{fruit} {libros.map((libro) => <span>{libro.titulo}</span>)}</p>
-       <input type="text" onChange={e => setTitulo(e.target.value)}/>
+  const rows= {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    },
+    getCheckboxProps: (record) => ({
+      disabled: record.name === 'Disabled User',
+    }),
+  };
 
-       
-     </div>
-   );
+  return (
+    <div>
+
+      <Table
+        rowSelection={{
+          type: Radio,
+          ...rows,
+        }}
+        columns={columns}
+        dataSource={data}
+      />
+    </div>
+  );
 }
 
 export default App;
